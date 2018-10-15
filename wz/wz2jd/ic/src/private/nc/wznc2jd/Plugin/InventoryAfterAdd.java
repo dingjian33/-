@@ -1,21 +1,12 @@
 package nc.wznc2jd.Plugin;
 
 import nc.bs.businessevent.bd.BDCommonEvent;
+import nc.bs.businessevent.BusinessEvent;
 import nc.bs.businessevent.IBusinessEvent;
 import nc.bs.businessevent.IEventType;
 
-import java.util.Arrays;
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.jd.open.api.sdk.response.ECLP.EclpGoodsTransportGoodsInfoResponse;
-
-import nc.bs.dao.BaseDAO;
-import nc.bs.dao.DAOException;
-import nc.bs.pmpub.uap.util.ExceptionUtils;
 import nc.vo.pub.BusinessException;
 import nc.wznc2jd.JDHelper.CommonHelper;
 import nc.wznc2jd.JDHelper.InventoryHelper;
@@ -24,12 +15,14 @@ public class InventoryAfterAdd implements nc.bs.businessevent.IBusinessListener 
 	public void doAction(IBusinessEvent event) throws BusinessException {
 		//		int x = 0;
 		try {
+			
+			//AggregatedValueObject[] value = getVOs(event);
 			if (IEventType.TYPE_INSERT_AFTER.equals(event.getEventType())
 					|| IEventType.TYPE_UPDATE_AFTER.equals(event.getEventType())) {
 				BDCommonEvent e = (BDCommonEvent) event;
 				Object[] value;
 				if ((IEventType.TYPE_INSERT_AFTER.equals(event.getEventType())))
-					value = e.getOldObjs();
+					value = e.getNewObjs();
 				else
 					value = e.getNewObjs();
 				if (null == value) {
@@ -45,7 +38,7 @@ public class InventoryAfterAdd implements nc.bs.businessevent.IBusinessListener 
 						nc.vo.bd.material.MaterialVO data = datas.get(i);
 						String org_def1 = CommonHelper.Getdef1(data.getPk_org());
 						String issend = data.getDef1();
-						if (CommonHelper.ToBooleanFromString(issend)) {
+						if (CommonHelper.ToBooleanFromString(issend)) {//是否传京东
 							//		        			EclpGoodsTransportGoodsInfoResponse rs=helper.Create(data);
 							//		        			if(!CommonHelper.StringEqual(rs.getCode(), "0")){
 							//		        				throw new Exception("传给 京东发生异常："+rs.getMsg());
@@ -59,11 +52,27 @@ public class InventoryAfterAdd implements nc.bs.businessevent.IBusinessListener 
 					}
 				} catch (Exception ex) {
 					throw ex;
-				}
-			}
+				
+			}}
 		} catch (Exception e) {
 			throw new BusinessException(e);
 		}
 	}
+//	private Object[] getVOs(IBusinessEvent event)
+//			throws BusinessException {
+//		ValueObject obj = (ValueObject) event.getUserObject();
+//		AggregatedValueObject[] vos = null;
+//		if ((obj instanceof ICGeneralCommonEvent.ICGeneralCommonUserObj)) {
+//			ICGeneralCommonEvent.ICGeneralCommonUserObj objs = (ICGeneralCommonEvent.ICGeneralCommonUserObj) obj;
+//			vos = (AggregatedValueObject[]) objs.getNewObjects(); // 新增的时候NewObject为空，修改的时候改变NewObject,OldObject不变
+//		} else {
+//			BusinessEvent.BusinessUserObj objs = (BusinessEvent.BusinessUserObj) obj;
+//			vos = (AggregatedValueObject[]) objs.getUserObj();
+//		}
+//		if ((vos == null) || (vos.length == 0)) {
+//			return null;
+//		}
+//		return vos;
+	//}
 
 }

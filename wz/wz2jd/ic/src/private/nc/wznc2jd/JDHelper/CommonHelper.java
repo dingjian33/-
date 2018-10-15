@@ -209,15 +209,22 @@ public class CommonHelper {
 		return code;
 	}
 
-	public static UFBoolean GetWhIsJd(String id) {
-		String sql = "select DEF1  from bd_stordoc where pk_stordoc='" + id
+	public static String GetWarehouse(String id) {
+		String defsql = "select def1  from bd_stordoc where pk_stordoc='" + id
 				+ "'";
-		String isjd = "";
+		String def1 = "";
+		IRowSet def = CommonHelper.sqlUtil.query(defsql);
+		while (def.next()) {
+			def1 = def.getString(0);
+		}
+		String sql = "select name  from bd_defdoc where pk_defdoc='" + def1
+				+ "'";
+		String storeType = "";
 		IRowSet rs = CommonHelper.sqlUtil.query(sql);
 		while (rs.next()) {
-			isjd = rs.getString(0);// itemID
+			storeType = rs.getString(0);
 		}
-		return new UFBoolean(isjd);
+		return storeType;
 	}
 
 	public static String Getdef1(String org) {
@@ -230,7 +237,7 @@ public class CommonHelper {
 		return def1;
 	}
 
-	public static String GetWhJdCode(String id) {
+	public static String GetWarecode(String id) {
 		String sql = "select DEF2  from bd_stordoc where pk_stordoc='" + id
 				+ "'";
 		String jdcode = "";
@@ -239,5 +246,26 @@ public class CommonHelper {
 			jdcode = rs.getString(0);// itemID
 		}
 		return jdcode;
+	}
+	public static String GetMaterialbarcode (String id) {
+		String sql = "select materialbarcode  from bd_material where pk_material='" + id
+				+ "'";
+		String materialbarcode  = "";
+		IRowSet rs = CommonHelper.sqlUtil.query(sql);
+		while (rs.next()) {
+			materialbarcode  = rs.getString(0);// itemID
+		}
+		return materialbarcode ;
+	}
+
+	public static String GetMaterialcode (String id) {
+		String sql = "select code  from bd_material where pk_material='" + id
+				+ "'";
+		String code  = "";
+		IRowSet rs = CommonHelper.sqlUtil.query(sql);
+		while (rs.next()) {
+			code  = rs.getString(0);// itemID
+		}
+		return code ;
 	}
 }

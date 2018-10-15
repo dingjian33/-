@@ -23,7 +23,7 @@ public class PurInWareHelper {
 			throws Exception {
 		JdClient client = new DefaultJdClient(SERVER_URL, accessToken, appKey,
 				appSecret);
-
+ 
 		EclpPoQueryPoOrderRequest request = new EclpPoQueryPoOrderRequest();
 		request.setPoOrderNo(GetStr(poOrderNos));
 		EclpPoQueryPoOrderResponse response = client.execute(request);
@@ -56,7 +56,7 @@ public class PurInWareHelper {
 		request.setSpPoOrderNo(data.getHVO().getVbillcode());// 外部采购订单号
 		request.setDeptNo(org_def1);// 事业部EBU4418046513690
 		// request.setWhNo("110007600");
-		request.setWhNo(CommonHelper.GetWhJdCode(data.getBVO()[0]
+		request.setWhNo(CommonHelper.GetWarecode(data.getBVO()[0]
 				.getPk_receivestore()));// 仓库编码
 		request.setSupplierNo("EMS4418046513631");// 供应商
 		request.setDeptGoodsNo(ConvertMaterial(ids));

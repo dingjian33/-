@@ -126,7 +126,7 @@ public class SaleOutHelper {
 		//		  request.setBdOwnerNo( "jingdong" );
 		request.setDepartmentNo("EBU4418046513690");
 //		request.setWarehouseNo("110007600");
-		request.setWarehouseNo(CommonHelper.GetWhJdCode(data.getHead().getCwarehouseid()));
+		request.setWarehouseNo(CommonHelper.GetWarecode(data.getHead().getCwarehouseid()));
 		request.setShipperNo("CYS0000010");
 //		request.setSalesPlatformOrderNo(data.getHead().getVdef3());
 		request.setSalePlatformSource("6");

@@ -14,6 +14,6 @@
 	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Module_Private_Library"/>
 	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Module_Lang_Library"/>
 	<classpathentry kind="con" path="com.yonyou.studio.udt.core.container/Generated_EJB"/>
-	<classpathentry kind="lib" path="C:/Users/Administrator/Desktop/open-api-sdk-2.0.jar"/>
+	<classpathentry kind="lib" path="C:/home/modules/ic/META-INF/lib/open-api-sdk-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

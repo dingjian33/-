@@ -131,7 +131,7 @@ public class DeliveryHelper {
 		//		  request.setBdOwnerNo( "jingdong" );
 		request.setDepartmentNo("EBU4418046513690");
 //		request.setWarehouseNo("110007600");
-		request.setWarehouseNo(CommonHelper.GetWhJdCode(whid));
+		request.setWarehouseNo(CommonHelper.GetWarecode(whid));
 		request.setShipperNo("CYS0000010");
 		request.setSalesPlatformOrderNo(head.getVdef3());
 		request.setSalePlatformSource("6");

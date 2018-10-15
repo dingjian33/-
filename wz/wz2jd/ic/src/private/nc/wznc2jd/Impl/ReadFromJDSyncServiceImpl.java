@@ -13,15 +13,11 @@ import nc.vo.so.m4331.entity.DeliveryHVO;
 import nc.vo.so.m4331.entity.DeliveryVO;
 import nc.wznc2jd.Helper.DataAccessHelper;
 import nc.wznc2jd.Helper.DataSqlQuery;
+import nc.wznc2jd.Helper.MapList;
 import nc.wznc2jd.JDHelper.CommonHelper;
 import nc.wznc2jd.JDHelper.PurInWareHelper;
 import nc.wznc2jd.JDHelper.ReturnInHelper;
 import nc.wznc2jd.JDHelper.SaleOutHelper;
-import nc.vo.hzsb.pub.MapList;
-import nc.vo.hzsb.sbvo.AggSBNCBillHVO;
-import nc.vo.hzsb.sbvo.SBNCBillBVO;
-import nc.vo.hzyb.ybvo.AggYBNCBillHVO;
-import nc.vo.hzyb.ybvo.YBNCBillBVO;
 import nc.vo.ic.m45.entity.PurchaseInBodyVO;
 import nc.vo.ic.m45.entity.PurchaseInHeadVO;
 import nc.vo.ic.m45.entity.PurchaseInVO;
@@ -67,7 +63,7 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 	 *            较大的时间
 	 * @return 相差天数
 	 * @throws ParseException
-	 */
+	 */ 
 	public static int daysBetween(Date smdate, Date bdate)
 			throws java.text.ParseException {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -124,8 +120,9 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 			BillQuery<ArriveVO> arrive = new BillQuery<ArriveVO>(ArriveVO.class);
 			DataSqlQuery query = new DataSqlQuery();
 			StringBuilder builder = new StringBuilder();
-			builder.append(" select A.VDEF13,A.pk_arriveorder from po_arriveorder A ");
-			builder.append(" where A.Vdef12='Y' and A.Fbillstatus ='3' and A.bisback ='N' and A.Dr=0 and A.VDEF13!='~' and A.VDEF13 is not null and A.VDEF13 !='null'");
+			builder.append(" select A.VDEF20,A.pk_arriveorder from po_arriveorder A ");
+			builder.append(" left join po_arriveorder_b b on A.pk_arriveorder = b.pk_arriveorder ");
+			builder.append(" where A.Vdef19='Y' and b.pk_receivestore='1001ZZ1000000000I7WM' and A.Fbillstatus ='3' and A.bisback ='N' and A.Dr=0 and A.VDEF20!='~' and A.VDEF20 is not null and A.VDEF20 !='null'");
 			ArrayList<String> ids = new ArrayList<String>();
 			ArrayList<String> nos = new ArrayList<String>();
 
@@ -135,10 +132,10 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 			HashMap<String, String> noidmap = new HashMap<String, String>();
 			IRowSet set = CommonHelper.sqlUtil.query(builder.toString());
 			while (set.next()) {
-				String no = set.getString(0);// vdef13
+				String no = set.getString(0);// vdef20
 				if (!nos.contains(no)) {
 					nos.add(no);
-					String id = set.getString(1);// id
+					String id = set.getString(1);// pk_id
 					noidmap.put(no, id);
 				}
 			}
@@ -155,7 +152,7 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 					QueryPoModel result = results.get(i);
 					if (CommonHelper.StringEqual(result.getPoOrderStatus(),
 							"70")) {
-						String no = result.getPoOrderNo();// 订单编码 ==vdef13
+						String no = result.getPoOrderNo();// 订单编码 ==vdef20
 						resultmap.put(no, result);
 						if (nos.contains(no)) {
 							ids.add(noidmap.get(no));// 单据号
@@ -164,7 +161,7 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 							PoItemModel model = result.getPoItemModelList()
 									.get(j);
 							String goodno = model.getGoodsNo();
-							String key = no + "_" + goodno;// vdef13+货物id
+							String key = no + "_" + goodno;// vdef20+货物id
 							if (!modelmap.containsKey(key)) {
 								modelmap.put(key, model);
 							}
@@ -223,7 +220,7 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 							po.setCtrantypeid(arriveHVO.getCtrantypeid());// 订单类型
 							po.setCvendorid(arriveHVO.getPk_supplier());// 供应商
 							po.setVbillcode(arriveHVO.getVbillcode());// 单据单号
-							po.setVdef13(arriveHVO.getVdef13());
+							po.setVdef20(arriveHVO.getVdef20());
 
 							ArriveItemVO[] bvo = arr[i].getBVO();
 							for (ArriveItemVO bodys : bvo) {
@@ -232,7 +229,7 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 								po.setCtaxcountryid(bodys.getCrececountryid());
 								po.setCwarehouseid(bodys.getPk_receivestore());// 仓库
 								String itemid = bodys.getPk_material();// 物料编码
-								String no = arriveHVO.getVdef13();
+								String no = arriveHVO.getVdef20();
 								if (!itemids.contains(itemid)) {
 									itemids.add(itemid);
 								}
@@ -388,10 +385,10 @@ public class ReadFromJDSyncServiceImpl implements ReadFromJDSyncServiceItf {
 								try {
 									if (UFDateTime.getDaysBetween(arr[i]
 											.getHVO().getCreationtime(), now) > maxdays) {// 防止错误数据一直读取
-										String sql = "update po_arriveorder Set Vdef12='"
-												+ arriveHVO.getVdef12()
-												+ "',Vdef13='"
-												+ arriveHVO.getVdef13()
+										String sql = "update po_arriveorder Set Vdef20='"
+												+ arriveHVO.getVdef19()
+												+ "',Vdef20='"
+												+ arriveHVO.getVdef20()
 												+ "' where pk_arriveorder='"
 												+ arriveHVO.getPk_arriveorder() + "'";
 										CommonHelper.getBaseDao()

@@ -19,7 +19,7 @@ public class InventoryHelper {
 
 		EclpGoodsTransportGoodsInfoRequest request = new EclpGoodsTransportGoodsInfoRequest();
 
-		request.setDeptNo(org_def1);
+		request.setDeptNo("EBU4418046513690");
 		request.setIsvGoodsNo(data.getCode());
 		request.setSpGoodsNo(data.getCode());
 		request.setBarcodes(data.getCode());
@@ -156,7 +156,7 @@ public class InventoryHelper {
 
 		EclpGoodsQueryGoodsInfoRequest request = new EclpGoodsQueryGoodsInfoRequest();
 
-		request.setDeptNo(org_def1);
+		request.setDeptNo("EBU4418046513690");
 		request.setIsvGoodsNos(data.getCode());//ISV…Ã∆∑±‡¬Î 
 		request.setGoodsNos(data.getDef2());
 		//		request.setQueryType( 2 ); 
